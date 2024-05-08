@@ -5,34 +5,34 @@
     <session-factory>
 
         <property name = "hibernate.connection.url">
-            jdbc:mysql://localhost:3306/sem_3_sql
+            jdbc:h2:mem:test
         </property>
 
         <property name = "hibernate.connection.username">
-            root
+            sa
         </property>
 
         <property name = "hibernate.connection.password">
-            61208619
+
         </property>
 
         <property name = "hibernate.connection.driver_class">
-            com.mysql.cj.jdbc.Driver
+            org.h2.Driver
         </property>
 
-        <!--        Hibernate будет прописывать SQL-команды в консоли-->
+<!--        Hibernate будет прописывать SQL-команды в консоли-->
         <property name="show_sql">
             true
         </property>
 
-        <!--        NONE (default), CREATE, CREATE-DROP, UPDATE, VALIDATE-->
-        <property name="hibernate.mysql.auto">
+<!--        NONE (default), CREATE, CREATE-DROP, UPDATE, VALIDATE-->
+        <property name="hibernate.hbm2ddl.auto">
             create
         </property>
 
 
         <!-- List of XML mapping files -->
-        <mapping class = "Group"/>
-        <mapping class = "Student"/>
+        <mapping class = "User"/>
+        <mapping class = "Pet"/>
     </session-factory>
 </hibernate-configuration>

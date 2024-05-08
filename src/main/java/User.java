@@ -1,6 +1,7 @@
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -22,7 +23,7 @@ public class User {
 
   @OneToMany(fetch = FetchType.EAGER)
   @JoinColumn(name = "owner_id")
-  private List<Pet> pets;
+  private List<Pet> pets = new ArrayList<>();
 
   public Long getId() {
     return id;
@@ -54,6 +55,10 @@ public class User {
 
   public void setPets(List<Pet> pets) {
     this.pets = pets;
+  }
+
+  public void addPet(Pet pet) {
+    pets.add(pet);
   }
 
   @Override

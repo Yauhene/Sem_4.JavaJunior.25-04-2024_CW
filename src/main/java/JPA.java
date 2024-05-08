@@ -1,3 +1,6 @@
+
+
+//import org.h2.engine.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class JPA {
-//https://www.tutorialspoint.com/hibernate/hibernate_configuration.htm
+
   public static void main(String[] args) throws SQLException {
     // JPA Спецификация для работы с БД через ORM
     // Набор интерфейсов и аннотаций (jakarta....)
@@ -18,25 +21,22 @@ public class JPA {
 
     // Entity - сущность
 
-    try (Connection connection = DriverManager.getConnection("jdbc:h2:mem:test", "sa", "");
-         Statement st = connection.createStatement()) {
-
-      
-      prepareTables(connection);
+    try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/sem_3_sql", "root", "61208619")) {
+//      prepareTables(connection);
       run(connection);
     }
   }
 
   private static void prepareTables(Connection connection) throws SQLException {
-    try (Statement st = connection.createStatement()) {
-      st.execute("""
-        create table users(
-          id bigint,
-          login varchar(256),
-          active boolean
-        )
-        """);
-    }
+//    try (Statement st = connection.createStatement()) {
+//      st.execute("""
+//        create table users(
+//          id bigint,
+//          login varchar(256),
+//          active boolean
+//        )
+//        """);
+//    }
 
     try (Statement st = connection.createStatement()) {
       st.execute("""
@@ -47,6 +47,25 @@ public class JPA {
         """);
     }
 
+//    try (Statement st = connection.createStatement()) {
+//      st.execute("""
+//        create table pet(
+//          id bigint,
+//          name varchar(256),
+//          owner_id varchar(256)
+//        )
+//        """);
+//    }
+
+    try (Statement st = connection.createStatement()) {
+      st.execute("""
+        insert into pet(id, name, owner_id) values
+          (411, 'barbos', 11),
+          (42, 'zhuchka', 2),
+          (43, 'murzik', 3)
+        """);
+    }
+
   }
 
   private static void run(Connection connection) throws SQLException {
@@ -54,22 +73,22 @@ public class JPA {
 
     Configuration configuration = new Configuration().configure();
     try (SessionFactory sessionFactory = configuration.buildSessionFactory()) {
-//      === Работает так, в нашем случае перенесено в hibernateCrud(sessionFactory);
-//      try (Session session = sessionFactory.openSession()) {
-//
-//      }
-      System.out.println("---------------------------------------------------------hibernateCrud(sessionFactory);");
       hibernateCrud(sessionFactory);
-      System.out.println("AFTER---------------------------------------------------------hibernateCrud(sessionFactory);");
+
       try (Session session = sessionFactory.openSession()) {
         User user = new User();
         user.setId(123L);
         user.setLogin("pet_owner");
+        user.setActive(true);
+
 
         Pet pet = new Pet();
         pet.setId(1L);
         pet.setName("pet");
         pet.setOwner(user);
+
+//        user.addPet(pet);
+
 
         Transaction tx = session.beginTransaction();
         session.persist(user);
@@ -80,6 +99,7 @@ public class JPA {
       User user;
       try (Session session = sessionFactory.openSession()) {
         user = session.find(User.class, 123L);
+
 //        System.out.println("AFTER SELECT");
 //        System.out.println("AFTER RELOAD");
       }
@@ -112,7 +132,6 @@ public class JPA {
     // SELECT
     try (Session session = sessionFactory.openSession()) {
       User _user = session.find(User.class, 1L);
-      System.out.println("User _user = session.find(User.class, 1L);-----");
       System.out.println(_user);
     }
 
