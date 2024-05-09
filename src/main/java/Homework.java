@@ -44,9 +44,6 @@ public class Homework {
         )
         """);
         }
-
-
-
     }
 
     private static void creteStudentTable(Connection connection) throws SQLException {
@@ -76,50 +73,15 @@ public class Homework {
             System.out.println("AFTER---------------------------------------------------------hibernateCrud(sessionFactory);");
 
 
-//            showList(sessionFactory);
 
-//            User user;
-//            try (Session session = sessionFactory.openSession()) {
-//                user = session.find(User.class, 123L);
-//            }
-//
-//            System.out.println(user.getPets());
-//            System.out.println(user);
-//
-//            System.out.println();
-//            System.out.println();
-//            System.out.println();
-//
-//            showList(sessionFactory);
-//
-//            try (Session session = sessionFactory.openSession()) {
-//                System.out.println("\ngetSingleResult() example: ----------");
-//                User user007 = session.createQuery("select u from User u where u.id = 123", User.class).getSingleResult();
-//                System.out.println("user007:" + user007);
-//            }
-//
-//            showList(sessionFactory);
-//            try (Session session = sessionFactory.openSession()) {
-//                System.out.println("\nBy session.createNativeQuery():");
-//                System.out.println(session.createNativeQuery("select count(1) from users", Long.class).getSingleResult());
-//                System.out.println("\ngetResultList() example: ----------");
-//                List<User> users = session.createQuery("select u from User u where u.login in ('Igor', 'pet_owner')", User.class).getResultList();
-//                System.out.println(users);
-//            }
+            System.out.println("\nПолучение списка студентов группы 'Java'");
+            Group group;
+            try (Session session = sessionFactory.openSession()) {
+                group = session.find(Group.class, "3e0351a6-84d8-4ef9-8d4b-5593c45c58c2");
+            }
 
-//            try (Session session = sessionFactory.openSession()) {
-//        System.out.println("\ngetResultList() example: ----------");
-//        session.createQuery("select u from User u where u.login = ?", User.class) // = Query<User> query
-//            .setParameter(1, "Igor")
-//            .setMaxResults(1)
-//            .getResultList();
+            System.out.println(group.getStudents());
 
-//
-//        System.out.println("list of users by 'query': ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~") ;
-//
-//        List<User> users = session.createQuery("select u from User u where u.login = ?", User.class).getResultList();
-//        System.out.println(users);
-//            }
 
         }
     }
@@ -142,7 +104,6 @@ public class Homework {
                     if (group_name.equals(testName)) {
                         thereIs = true;
                         mapGroups.put(group_id, group_name);
-//                        System.out.println("mapGroups: " + mapGroups);
                     }
                 }
                 if (!thereIs) {
@@ -151,7 +112,6 @@ public class Homework {
                         groupJava.setId(UUID.randomUUID().toString());
                         groupJava.setGroup_name("Java");
                         System.out.println("After construction groupJava: " + groupJava);
-
 
                         try (Session session = sessionFactory.openSession()) {
                             Transaction tx = session.beginTransaction();
@@ -187,7 +147,7 @@ public class Homework {
                 groupTest.setId(UUID.randomUUID().toString());
                 groupTest.setGroup_name("Test");
                 System.out.println("After construction groupTest: " + groupTest);
-//                mapGroups.put(groupTest.getId(), groupTest.getGroup_name());
+                mapGroups.put(groupTest.getId(), groupTest.getGroup_name());
 //                System.out.println("mapGroups: " + mapGroups);
 
                 try (Session session = sessionFactory.openSession()) {
@@ -216,34 +176,29 @@ public class Homework {
                 String gr_id = resultSet.getString("group_id");
                 String[] student_info = new String[]{first_name, second_name, gr_id};
                 mapStudents.put(id,student_info);
-//                Group group = resultSet.getObject(4, Group);
                 st.setId(id);
                 st.setFirstName(first_name);
                 st.setSecondName(second_name);
 //                st.setGroup(group);
-
-                thereIs = true;
-//                mapStudents.put(group_id, st);
-//                    System.out.println("mapGroups: " + mapGroups);
-
             }
         }
 
-//             Заселение группы студентами
-//             student_1
+//             Заселение группы "Java" студентами
+//             student_1 и student_2
         Student student_1 = new Student();
         Student student_2 = new Student();
-        if (mapGroups.containsValue("Java"))
+        if (mapGroups.containsValue("Java")) // проверка наличия группы в мапе групп
             for (Map.Entry item : mapGroups.entrySet()) {
                 if (item.getValue().equals("Java")) {
                     try (Session session = sessionFactory.openSession()) {
                         Group group =  session.find(Group.class, item.getKey());
+                        // studentIdByName() - поиск id студента по содержимому записи в таблице
                         if (studentIdByName("Igor", "Andreev").equals("oops")) {
-//                            Student student_1 = new Student();
                             student_1.setId(String.valueOf(UUID.randomUUID()));
                             student_1.setFirstName("Igor");
                             student_1.setSecondName("Andreev");
                             student_1.setGroup(group);
+                            // подготовка массива с данными студента для внесения его в мапу студентов
                             String[] st_info = new String[]{student_1.getFirstName(),student_1.getSecondName(), student_1.getGroup().getId()};
                             mapStudents.put(student_1.getId(), st_info);
                             System.out.println("First is done");
@@ -274,43 +229,42 @@ public class Homework {
                     }
                 }
             }
+        createStudent("Test", "Феофан", "Огурцов", sessionFactory);
+        createStudent("Test", "Артем", "Голопушко", sessionFactory);
+//        showStudents();
+
 
 //
 //        showList(sessionFactory);
 //
-//        // SELECT
-//        try (Session session = sessionFactory.openSession()) {
-//            User _user = session.find(User.class, 1L); // SELECT
-//            System.out.println("User _user = session.find(User.class, 1L);-----");
-//            System.out.println(_user);
-//        }
+        // SELECT
+        try (Session session = sessionFactory.openSession()) {
+            Group group = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5"); // SELECT
+            System.out.println("\nGroup  = session.find(Group.class, Group group = session.find(Group.class, \"6b37546e-9bab-4fd9-8e35-7096c2daddb5\"));-----");
+            System.out.println(group);
+        }
 //
-//        try (Session session = sessionFactory.openSession()) {
-//            Transaction tx = session.beginTransaction();
-//            session.merge(user); // UPDATE
-//            tx.commit();
-//        }
-//
-//        try (Session session = sessionFactory.openSession()) {
-////      Transaction tx = session.beginTransaction();
-////      session.remove(user); // DELETE
-////      tx.commit();
-//        }
-//
-//        // SELECT
-//        try (Session session = sessionFactory.openSession()) {
-//            User savedUser = session.find(User.class, 4L);
-//            System.out.println("User with id = 4: " + savedUser);
-//        }
-//        showList(sessionFactory);
+        try (Session session = sessionFactory.openSession()) {
+            Group group = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5");
+            Transaction tx = session.beginTransaction();
+            session.merge(group); // UPDATE
+            tx.commit();
+        }
+
+        try (Session session = sessionFactory.openSession()) {
+//            Group group = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5");
+//              Transaction tx = session.beginTransaction();
+//              session.remove(group); // DELETE
+//              tx.commit();
+        }
+
+        // SELECT
+        try (Session session = sessionFactory.openSession()) {
+            Group savedGroup = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5");
+            System.out.println("\nGroup with id = 6b37546e-9bab-4fd9-8e35-7096c2daddb5: " + savedGroup);
+        }
+        showList(sessionFactory);
     }
-//    private static void showList(SessionFactory sFactory) {
-//        try (Session session = sFactory.openSession()) {
-//            System.out.println("\nList, all users: ----------");
-//            List<Student> students = session.createQuery("select s from Student s ", Student.class).getResultList();
-//            System.out.println(students);
-//        }
-//    }
 
     private static long findGroupByName(String gr_name) {
       long gr_count = 0;
@@ -319,45 +273,72 @@ public class Homework {
       return gr_count;
     }
 
+
+    /**
+     * Функция поиска id студента по значениям полей его записи
+      * @param studentFirstName - значение поля "first_name"
+     * @param studentSecondName - значение поля "second_name"
+     * @return
+     */
     private static String studentIdByName(String studentFirstName, String studentSecondName) {
-        System.out.println("Time for search... Size of map is: " + mapStudents.entrySet().size());
-        System.out.println("Finding of " + studentFirstName + " " + studentSecondName);
-      showStudents();
-      String result = "oops";
-        System.out.println("======");
+      String result = "oops"; // значение результата функции при неудачном поиске
         for (Map.Entry item: mapStudents.entrySet()){
-//            Student st = (Student) item.getValue();
-//            System.out.println("Текущий st: " + (Student) item.getValue());
-//            System.out.println("Получено: " + st.getFirstName() + " " + st.getSecondName());
-//            System.out.println(((Student) item.getValue()).getFirstName() + " = " + studentFirstName);
-//            System.out.println(((Student) item.getValue()).getFirstName().equals(studentFirstName) + " " + ((Student) item.getValue()).getSecondName().equals(studentSecondName));
-            System.out.println("\n==========================================================");
             String[] strArray = (String[]) item.getValue();
-//            System.out.println("item.getValue()): " + ((String[]) item.getValue()));
-            System.out.println(strArray[0] + " " + strArray[1]);
-            System.out.println(studentFirstName + " " + studentSecondName);
             if ((strArray[0].equals(studentFirstName) && (strArray[1].equals(studentSecondName)))) {
                 result = (String) item.getKey();
-                System.out.println("result " + result);
             }
-
         }
-
-
-        System.out.println("result " + result);
       return result;
     }
 
+    /**
+     * Метод вывода списка студентов из мапы в консоль
+     */
     private static void showStudents() {
         System.out.println("\nСписок студентов: ");
         System.out.println(mapStudents.keySet().size());
         for (Map.Entry item: mapStudents.entrySet()){
             String[] strArray = (String[]) item.getValue();
-//            Student st = (Student) item.getValue();
             System.out.println(item.getKey() + " " +
                     strArray[0] + " " +
                     strArray[1] + " " +
                     strArray[2]);
+        }
+    }
+
+    private static void createStudent(String groupName, String fName, String sName,SessionFactory sessionFactory) {
+        Student student = new Student();
+        if (mapGroups.containsValue(groupName)) // проверка наличия группы в мапе групп
+            for (Map.Entry item : mapGroups.entrySet()) {
+                if (item.getValue().equals(groupName)) {
+                    try (Session session = sessionFactory.openSession()) {
+                        Group group =  session.find(Group.class, item.getKey());
+                        // studentIdByName() - поиск id студента по содержимому записи в таблице
+                        if (studentIdByName(fName, sName).equals("oops")) {
+                            student.setId(String.valueOf(UUID.randomUUID()));
+                            student.setFirstName(fName);
+                            student.setSecondName(sName);
+                            student.setGroup(group);
+                            // подготовка массива с данными студента для внесения его в мапу студентов
+                            String[] st_info = new String[]{student.getFirstName(),student.getSecondName(), student.getGroup().getId()};
+                            mapStudents.put(student.getId(), st_info);
+                            try (session) {
+                                Transaction tx = session.beginTransaction();
+                                session.persist(student); // INSERT
+                                tx.commit();
+                            }
+                        }
+
+                    }
+                }
+            }
+
+    }
+    private static void showList(SessionFactory sFactory) {
+        try (Session session = sFactory.openSession()) {
+            System.out.println("\nList, all groups: ----------");
+            List<Group> groups = session.createQuery("select g from Group g ", Group.class).getResultList();
+            System.out.println(groups);
         }
     }
 }
