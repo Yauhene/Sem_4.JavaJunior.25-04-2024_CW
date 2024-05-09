@@ -32,7 +32,7 @@
 
 
         <!-- List of XML mapping files -->
-        <mapping class = "Group"/>
-        <mapping class = "Student"/>
+        <mapping class = "HomeWork.Group"/>
+        <mapping class = "HomeWork.Student"/>
     </session-factory>
 </hibernate-configuration>

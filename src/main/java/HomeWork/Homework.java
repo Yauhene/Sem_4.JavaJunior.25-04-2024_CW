@@ -1,6 +1,7 @@
+package HomeWork;
+
 import org.hibernate.*;
 import org.hibernate.cfg.*;
-import org.hibernate.id.uuid.*;
 
 import java.sql.*;
 import java.util.*;
@@ -13,7 +14,7 @@ public class Homework {
 
   /**
    * Перенести структуру дз третьего урока на JPA:
-   * 1. Описать сущности Student и Group
+   * 1. Описать сущности HomeWork.Student и HomeWork.Group
    * 2. Написать запросы: Find, Persist, Remove
    * 3. ... поупражняться с разными запросами ...
    */
@@ -210,7 +211,7 @@ public class Homework {
                         }
                         System.out.println("Karabas Barabas id = " + studentIdByName("Karabas", "Barabas"));
                         if (studentIdByName("Karabas", "Barabas").equals("oops")) {
-//                            Student student_2 = new Student();
+//                            HomeWork.Student student_2 = new HomeWork.Student();
                             student_2.setId(String.valueOf(UUID.randomUUID()));
                             student_2.setFirstName("Karabas");
                             student_2.setSecondName("Barabas");
@@ -240,7 +241,7 @@ public class Homework {
         // SELECT
         try (Session session = sessionFactory.openSession()) {
             Group group = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5"); // SELECT
-            System.out.println("\nGroup  = session.find(Group.class, Group group = session.find(Group.class, \"6b37546e-9bab-4fd9-8e35-7096c2daddb5\"));-----");
+            System.out.println("\nHomeWork.Group  = session.find(HomeWork.Group.class, HomeWork.Group group = session.find(HomeWork.Group.class, \"6b37546e-9bab-4fd9-8e35-7096c2daddb5\"));-----");
             System.out.println(group);
         }
 //
@@ -252,7 +253,7 @@ public class Homework {
         }
 
         try (Session session = sessionFactory.openSession()) {
-//            Group group = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5");
+//            HomeWork.Group group = session.find(HomeWork.Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5");
 //              Transaction tx = session.beginTransaction();
 //              session.remove(group); // DELETE
 //              tx.commit();
@@ -261,7 +262,7 @@ public class Homework {
         // SELECT
         try (Session session = sessionFactory.openSession()) {
             Group savedGroup = session.find(Group.class, "6b37546e-9bab-4fd9-8e35-7096c2daddb5");
-            System.out.println("\nGroup with id = 6b37546e-9bab-4fd9-8e35-7096c2daddb5: " + savedGroup);
+            System.out.println("\nHomeWork.Group with id = 6b37546e-9bab-4fd9-8e35-7096c2daddb5: " + savedGroup);
         }
         showList(sessionFactory);
     }
@@ -337,7 +338,7 @@ public class Homework {
     private static void showList(SessionFactory sFactory) {
         try (Session session = sFactory.openSession()) {
             System.out.println("\nList, all groups: ----------");
-            List<Group> groups = session.createQuery("select g from Group g ", Group.class).getResultList();
+            List<Group> groups = session.createQuery("select g from HomeWork.Group g ", Group.class).getResultList();
             System.out.println(groups);
         }
     }

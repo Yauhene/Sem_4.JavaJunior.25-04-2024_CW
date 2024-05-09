@@ -1,3 +1,5 @@
+package HomeWork;
+
 import javax.persistence.*;
 
 @Entity
@@ -56,7 +58,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "HomeWork.Student{" +
                 "id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +

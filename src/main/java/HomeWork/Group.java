@@ -1,3 +1,5 @@
+package HomeWork;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -46,7 +48,7 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group{" +
+        return "HomeWork.Group{" +
                 "id ='" + id + '\'' +
                 ", group_name ='" + group_name + '\'' +
                 ", students =" + students +
